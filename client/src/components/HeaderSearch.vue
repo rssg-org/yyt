@@ -347,30 +347,30 @@ const submitSearch = () => {
   suggestions.value = [];
   selectedIndex.value = -1;
   
-  // Check if input is a YouTube video URL or video ID
-  const videoIdMatch = trimmed.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|^)([a-zA-Z0-9_-]{11})(?:[&?]|$)/);
-  if (videoIdMatch && videoIdMatch[1]) {
-    router.push(`/watch?v=${videoIdMatch[1]}`);
+  // Check if it's just a video ID (11 characters, alphanumeric, dash, underscore)
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+    router.push(`/watch?v=${trimmed}`);
     return;
   }
   
-  // Check if input is a YouTube channel URL or channel ID
-  const channelUrlMatch = trimmed.match(/youtube\.com\/(?:channel\/|c\/|@|user\/)([a-zA-Z0-9_-]+)/);
-  if (channelUrlMatch && channelUrlMatch[1]) {
-    router.push(`/channel/${channelUrlMatch[1]}`);
+  // Check if input is a YouTube video URL
+  const videoUrlMatch = trimmed.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[&?]|$)/);
+  if (videoUrlMatch && videoUrlMatch[1]) {
+    router.push(`/watch?v=${videoUrlMatch[1]}`);
     return;
   }
   
-  // Check if it looks like a channel ID (starts with UC and 22 chars)
+  // Check if it looks like a channel ID (starts with UC and is 24 characters total)
   const channelIdMatch = trimmed.match(/^(UC[a-zA-Z0-9_-]{22})$/);
   if (channelIdMatch) {
     router.push(`/channel/${channelIdMatch[1]}`);
     return;
   }
   
-  // Check if it's just a video ID (11 characters)
-  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
-    router.push(`/watch?v=${trimmed}`);
+  // Check if input is a YouTube channel URL
+  const channelUrlMatch = trimmed.match(/youtube\.com\/(?:channel\/|c\/|@|user\/)([a-zA-Z0-9_-]+)/);
+  if (channelUrlMatch && channelUrlMatch[1]) {
+    router.push(`/channel/${channelUrlMatch[1]}`);
     return;
   }
   
